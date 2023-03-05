@@ -132,6 +132,7 @@
   <ItemGroup>
     <Text Include="outDichotomy.txt" />
     <Text Include="outGolden.txt" />
+    <Text Include="outInterval.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

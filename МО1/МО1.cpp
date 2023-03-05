@@ -2,7 +2,7 @@
 #include <iomanip>
 #include <fstream>
 
-#define T true
+#define T false
 #define x0 1
 
 #if T
@@ -22,11 +22,18 @@ void DichotomyMethod()
 {
 	ofstream fout("outDichotomy.txt");
 
-	type a, b, xLeft, xRight, eps, h, a_prev, b_prev;
-	a = a_prev = -2;
-	b = b_prev = 20;
-	eps = 10e-7;
-	h = eps / 2;
+	/// <summary>
+	/// Input data
+	/// </summary>
+	type a = -2;
+	type b = 20;
+	type eps = 10e-7;
+
+	type xLeft, xRight;
+
+	type h = eps / 2;
+	type a_prev = a;
+	type b_prev = b;
 
 	int iteration = 1;
 
@@ -57,14 +64,17 @@ void DichotomyMethod()
 	}
 
 	type x = (a + b) / 2;
-	cout << "min = " << setprecision(7) << x << endl;
-	cout << "F min = " << setprecision(7) << F(x) << endl;
+	fout << "min = " << setprecision(7) << x << endl;
+	fout << "F min = " << setprecision(7) << F(x) << endl;
 }
 
 void GoldenRatioMethod()
 {
 	ofstream fout("outGolden.txt");
 
+	/// <summary>
+	/// Input data
+	/// </summary>
 	type a = -2;
 	type b = 20;
 	type eps = 1e-7;
@@ -84,13 +94,13 @@ void GoldenRatioMethod()
 	{
 		fout << iteration << (iteration >= 10 ? " | " : "  | ");
 		fout << fixed << setprecision(7)
-			<< xLeft     << " | "
-			<< xRight    << " | "
-			<< yLeft     << " | "
-			<< yRight    << " | "
-			<< a		 << " | "
-			<< b		 << " | "
-			<< len		 << " | ";
+			<< xLeft << " | "
+			<< xRight << " | "
+			<< yLeft << " | "
+			<< yRight << " | "
+			<< a << " | "
+			<< b << " | "
+			<< len << " | ";
 
 		if (yLeft > yRight)
 		{
@@ -126,12 +136,81 @@ void GoldenRatioMethod()
 	}
 
 	type x = (a + b) / 2;
-	cout << "min = " << setprecision(7) << x << endl;
-	cout << "F min= " << setprecision(7) << F(x) << endl;
+	fout << "min = " << setprecision(7) << x << endl;
+	fout << "F min= " << setprecision(7) << F(x) << endl;
+}
+
+void IntervalContainingMinimumFunctions(type xstart)
+{
+	ofstream fout("outInterval.txt");
+
+	/// <summary>
+	/// Input data
+	/// </summary>
+	/// <param name="xstart"> Start point </param>
+	const type eps = 1e-7;
+
+	type h = eps / 2;
+	type x1 = xstart + h;
+
+	type y1 = F(xstart);
+	type y2 = F(x1);
+
+	int iteration = 1;
+
+	if (y1 < y2)
+	{
+		x1 = xstart - h;
+
+		type ytmp = F(x1);
+
+		if (ytmp > y1)
+		{
+			fout << iteration << (iteration >= 10 ? " | " : "  | ")
+				<< x1 + (2 * h) << " | " << F(x1 + (2 * h)) << endl;
+			fout << "Интервал, содержащий минимум: [" << x1 << "," << x1 + (2 * h) << "]" << "|x0 - x| = " << abs(x1 - (x1 + 2 * h)) << endl;
+			return;
+		}
+
+		h = -h;
+	}
+
+	type x;
+	while (true)
+	{
+		h *= 2;
+		x = x1 + h;
+
+		y1 = F(x1);
+		y2 = F(x);
+
+		fout << noshowpos << iteration << (iteration >= 10 ? " | " : "  | ");
+		fout << showpos << fixed << setprecision(7) << x1 << " | " << y1 << endl;
+
+		if (y1 < y2) break;
+		xstart = x1;
+		x1 = x;
+		y1 = y2;
+
+		++iteration;
+	}
+
+	if (x < xstart)
+	{
+		type tmp = x;
+		x = xstart;
+		xstart = tmp;
+	}
+
+	fout << noshowpos << "Интервал, содержащий минимум: [" << xstart << "," << x << "]" << " |x0 - x| = " << abs(xstart - x) << endl;
+
 }
 
 int main()
 {
+	setlocale(0, "ru");
+
 	DichotomyMethod();
 	GoldenRatioMethod();
+	IntervalContainingMinimumFunctions(-1);
 }

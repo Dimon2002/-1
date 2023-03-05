@@ -22,5 +22,6 @@
   <ItemGroup>
     <Text Include="outGolden.txt" />
     <Text Include="outDichotomy.txt" />
+    <Text Include="outInterval.txt" />
   </ItemGroup>
 </Project>
