@@ -43,13 +43,13 @@ void DichotomyMethod()
 
 		fout << iteration << (iteration >= 10 ? " | " : "  | ");
 		fout << fixed << setprecision(7)
-			<< xLeft << " | "
+			<< xLeft  << " | "
 			<< xRight << " | "
-			<< yLeft << " | "
+			<< yLeft  << " | "
 			<< yRight << " | "
-			<< a << " | "
-			<< b << " | "
-			<< b - a << " | "
+			<< a	  << " | "
+			<< b	  << " | "
+			<< b - a  << " | "
 			<< (b_prev - a_prev) / (b - a) << endl;
 
 		a_prev = a;
@@ -58,8 +58,8 @@ void DichotomyMethod()
 	}
 
 	type x = (a + b) / 2;
-	fout << "min = " << setprecision(7) << x << endl;
-	fout << "F min = " << setprecision(7) << F(x) << endl;
+	fout << "x = " << setprecision(7) << x << endl;
+	fout << "F(x) = " << setprecision(7) << F(x) << endl;
 }
 
 void GoldenRatioMethod()
@@ -88,13 +88,13 @@ void GoldenRatioMethod()
 	{
 		fout << iteration << (iteration >= 10 ? " | " : "  | ");
 		fout << fixed << setprecision(7)
-			<< xLeft << " | "
+			<< xLeft  << " | "
 			<< xRight << " | "
-			<< yLeft << " | "
+			<< yLeft  << " | "
 			<< yRight << " | "
-			<< a << " | "
-			<< b << " | "
-			<< len << " | ";
+			<< a      << " | "
+			<< b      << " | "
+			<< len    << " | ";
 
 		if (yLeft > yRight)
 		{
@@ -130,8 +130,8 @@ void GoldenRatioMethod()
 	}
 
 	type x = (a + b) / 2;
-	fout << "min = " << setprecision(7) << x << endl;
-	fout << "F min= " << setprecision(7) << F(x) << endl;
+	fout << "x = " << setprecision(7) << x << endl;
+	fout << "F(x) = " << setprecision(7) << F(x) << endl;
 }
 
 void IntervalContainingMinimumFunctions(type xstart)
@@ -200,13 +200,15 @@ void IntervalContainingMinimumFunctions(type xstart)
 
 }
 
-void BinetFormula()
+type BinetFormula(int n)
 {
-
+	return (pow((1 + sqrt(5)) / 2, n) - pow((1 - sqrt(5)) / 2, n)) / sqrt(5.0);
 }
 
 void FibonacciMethod()
 {
+	ofstream fout("outFibonacci.txt");
+
 	/// <summary>
 	/// Input data
 	/// </summary>
@@ -214,10 +216,60 @@ void FibonacciMethod()
 	type b = 20;
 	type eps = 1e-7;
 
-
 	int n = 1;
 
+	type len = b - a;
+	const type сondition = len / eps;
 
+	while (BinetFormula(n + 2) < сondition)
+		++n;
+
+	type xLeft = a + len * BinetFormula(n) / BinetFormula(n + 2);
+	type xRight = a + len * BinetFormula(n + 1) / BinetFormula(n + 2);
+
+	type yLeft = F(xLeft);
+	type yRight = F(xRight);
+	 
+	for (size_t k = 1; k < n; ++k)
+	{
+		if (yLeft > yRight)
+		{
+			a = xLeft;
+			xLeft = xRight;
+			yLeft = yRight;
+
+			xRight = a + (b - a) * BinetFormula(n - k + 2) / BinetFormula(n - k + 3);
+			yRight = F(xRight);
+		}
+		else
+		{
+			b = xRight;
+			xRight = xLeft;
+			yRight = yLeft;
+
+			xLeft = a + (b - a) * BinetFormula(n - k + 1) / BinetFormula(n - k + 3);
+			yLeft = F(xLeft);
+		}
+
+		fout << k << (k >= 10 ? " | " : "  | ");
+		fout << fixed << setprecision(7)
+			<< xLeft  << " | "
+			<< xRight << " | "
+			<< yLeft  << " | "
+			<< yRight << " | "
+			<< a      << " | "
+			<< b      << " | "
+			<< b - a  << " | "
+			<< len / (b - a) << endl;
+
+		len = b - a;
+	}
+
+	yLeft <= F(xLeft + eps) ? b = xLeft : a = xLeft;
+	
+	type x = (a + b) / 2;
+	fout << "x = " << setprecision(7) << x << endl;
+	fout << "F(x) = " << setprecision(7) << F(x) << endl;
 }
 
 int main()
@@ -226,5 +278,6 @@ int main()
 
 	DichotomyMethod();
 	GoldenRatioMethod();
-	IntervalContainingMinimumFunctions(3);
+	FibonacciMethod();
+	IntervalContainingMinimumFunctions(-1);
 }

@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="outDichotomy.txt" />
+    <Text Include="outFibonacci.txt" />
     <Text Include="outGolden.txt" />
     <Text Include="outInterval.txt" />
   </ItemGroup>

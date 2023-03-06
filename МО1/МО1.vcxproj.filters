@@ -23,5 +23,6 @@
     <Text Include="outGolden.txt" />
     <Text Include="outDichotomy.txt" />
     <Text Include="outInterval.txt" />
+    <Text Include="outFibonacci.txt" />
   </ItemGroup>
 </Project>
