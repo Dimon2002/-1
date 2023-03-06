@@ -2,14 +2,8 @@
 #include <iomanip>
 #include <fstream>
 
-#define T false
 #define x0 1
-
-#if T
 typedef double type;
-#else
-typedef float type;
-#endif
 
 using namespace std;
 
@@ -185,7 +179,7 @@ void IntervalContainingMinimumFunctions(type xstart)
 		y2 = F(x);
 
 		fout << noshowpos << iteration << (iteration >= 10 ? " | " : "  | ");
-		fout << showpos << fixed << setprecision(7) << x1 << " | " << y1 << endl;
+		fout << showpos << fixed << setprecision(7) << x << " | " << y2 << endl;
 
 		if (y1 < y2) break;
 		xstart = x1;
@@ -206,11 +200,31 @@ void IntervalContainingMinimumFunctions(type xstart)
 
 }
 
+void BinetFormula()
+{
+
+}
+
+void FibonacciMethod()
+{
+	/// <summary>
+	/// Input data
+	/// </summary>
+	type a = -2;
+	type b = 20;
+	type eps = 1e-7;
+
+
+	int n = 1;
+
+
+}
+
 int main()
 {
 	setlocale(0, "ru");
 
 	DichotomyMethod();
 	GoldenRatioMethod();
-	IntervalContainingMinimumFunctions(-1);
+	IntervalContainingMinimumFunctions(3);
 }
